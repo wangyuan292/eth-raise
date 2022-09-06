@@ -1,0 +1,3 @@
+const Web3 = require('web3');
+const web3 = new Web3('http://localhost:8545');
+console.log(web3.eth.accounts.decrypt("{\"address\":\"65d653951772dcb94dddb72907f45cd0e7de7e78\",\"crypto\":{\"cipher\":\"aes-128-ctr\",\"ciphertext\":\"1ce3ce0267e2383328c2c494a40617d16f2ac875cb5c5e460eb5cb08f7fe6f39\",\"cipherparams\":{\"iv\":\"65826e58dc8c0196bb9032571c2fae8f\"},\"kdf\":\"scrypt\",\"kdfparams\":{\"dklen\":32,\"n\":262144,\"p\":1,\"r\":8,\"salt\":\"d98968b27bb10ce887dda66b4b4f91082e13f26984a8580b4b944bf561ac7a36\"},\"mac\":\"7f915524585ea6e0e52cad919e85a2150e348ed76aefd18d32aaa5aa87946de3\"},\"id\":\"f5f184e0-3e12-44ff-9b3c-02a1adcd0b43\",\"version\":3}",'123456'));
