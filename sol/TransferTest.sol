@@ -9,7 +9,7 @@ contract TransferTest is Console{
 
     bytes32 name; // 筹款人姓名
     bytes32 sickName; // 疾病名称
-    uint expectAmount = 100 ether; // 筹款金额
+    uint expectAmount; // 筹款金额
     uint total; // 总金额
     uint outAmount;
 
@@ -21,20 +21,31 @@ contract TransferTest is Console{
 
     Donator[] donators; // 捐赠者
 
-    // 向合约账户转账 
+    event transferEvent(address indexed toAddress, uint256 amount);
+
+    mapping(address => uint256) record;
+
+    constructor(uint _expectAmount) {
+        expectAmount = _expectAmount;
+    }
+
+    // 向合约账户转账
     function transderToContract() payable public {
         uint256 amount = msg.value;
+        address toAddress = address(this);
         log("value", amount);
         require(amount > 100, "Value should be lagger than 100.");
-        payable(address(this)).transfer(amount);
+        payable(address(toAddress)).transfer(amount);
         total += amount;
         donators.push(Donator({
         sender: msg.sender,
         spent: amount
         }));
+        emit transferEvent(toAddress, amount);
+        record[toAddress] = amount;
     }
 
-    // 向合约账户转账 
+    // 向合约账户转账
     function transderToAddress(address _outAmountAddress) payable public {
         uint256 amount = msg.value;
         log("value", amount);
@@ -42,10 +53,10 @@ contract TransferTest is Console{
         payable(address(_outAmountAddress)).transfer(amount);
     }
 
-    function getBalanceOfAddress() view returns(uint){
-        return address(this).balance;
+    function getBalanceOfAddress(address _address) public view returns(uint){
+        return address(_address).balance;
     }
-    
+
     function getTotal() public view returns(uint) {
         return total;
     }
@@ -65,9 +76,9 @@ contract TransferTest is Console{
     function getBalanceOfContract() public view returns(uint) {
         return address(this).balance;
     }
-    
+
     fallback() external payable {}
-    
+
     receive() external payable {}
 
 }
