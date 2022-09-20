@@ -34,7 +34,7 @@ contract TransferTest is Console{
         uint256 amount = msg.value;
         address toAddress = address(this);
         log("value", amount);
-        require(amount > 100, "Value should be lagger than 100.");
+        //require(amount > 100, "Value should be lagger than 100.");
         payable(address(toAddress)).transfer(amount);
         total += amount;
         donators.push(Donator({
@@ -49,7 +49,7 @@ contract TransferTest is Console{
     function transderToAddress(address _outAmountAddress) payable public {
         uint256 amount = msg.value;
         log("value", amount);
-        require(amount > 100, "Value should be lagger than 100.");
+        //require(amount > 100, "Value should be lagger than 100.");
         payable(address(_outAmountAddress)).transfer(amount);
     }
 
