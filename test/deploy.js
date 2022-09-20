@@ -4,6 +4,10 @@ const hardhat = require("hardhat");
 
 // TransferTest Contract address 0xa689B1BD023bcF73fC6430F915C09A8cd8916951
 
+//run the script :  npx hardhat run test/deploy.js --network ropsten
+
+//reference url: https://blog.csdn.net/qq_36838406/article/details/118112718?spm=1001.2014.3001.5501
+
 async function deployGreeter() {
     // 获取合约文件
     const Greeter = await hardhat.ethers.getContractFactory("Greeter");
