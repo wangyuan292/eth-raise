@@ -4,9 +4,20 @@ const hardhat = require("hardhat");
 
 // TransferTest Contract address 0xa689B1BD023bcF73fC6430F915C09A8cd8916951
 
-//run the script :  npx hardhat run test/deploy.js --network ropsten
+//run the script :  npx hardhat run test/deploy.js --network goerli
 
 //reference url: https://blog.csdn.net/qq_36838406/article/details/118112718?spm=1001.2014.3001.5501
+
+async function deployStorage() {
+    // 获取合约文件
+    const Storage = await hardhat.ethers.getContractFactory("Storage");
+    // 获取合约部署的对象
+    const storage = await Storage.deploy();
+    // 执行部署
+    await storage.deployed();
+    // 打印一下部署的结果
+    console.log("Storage deployed to:", storage.address);
+}
 
 async function deployGreeter() {
     // 获取合约文件

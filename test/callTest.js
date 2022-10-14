@@ -1,150 +1,15 @@
-const abiJson = [
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_expectAmount",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "LogUint",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "toAddress",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "transferEvent",
-        "type": "event"
-    },
-    {
-        "stateMutability": "payable",
-        "type": "fallback"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_address",
-                "type": "address"
-            }
-        ],
-        "name": "getBalanceOfAddress",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "getBalanceOfContract",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "getExpectAmount",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "getTotal",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_outAmountAddress",
-                "type": "address"
-            }
-        ],
-        "name": "transderToAddress",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "transderToContract",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "stateMutability": "payable",
-        "type": "receive"
-    }
-];
-
 
 const Web3 = require('web3');
-const abi = require("../artifacts/contracts/TransferTest.sol/TransferTest.json").abi;
-const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/7dc6b83ee508404b8122df710668c591'));
+const abi = require("../artifacts/contracts/Storage.sol/Storage.json").abi;
+const web3 = new Web3(new Web3.providers.HttpProvider('https://goerli.infura.io/v3/7dc6b83ee508404b8122df710668c591'));
 
 const accountFrom = {
     privateKey: '2afd0e40191e644cf818fefde0925ca6cb4932e1b049178cfe0b3a670ae784db',
 };
-const contractAddress = "0xa689B1BD023bcF73fC6430F915C09A8cd8916951";
+
+// Storage goerli 0xB9FcffCe4066944754c52800Be0D5d28697EecC7
+// TransferTest goerli  0xdbf58C0869aC7fed77B3164661C56A5907c64F64
+const contractAddress = "0xB9FcffCe4066944754c52800Be0D5d28697EecC7";
 const accountAddress = "0x415feD566D92c7b9C4c610A797dc8a8E9a2b7FF6";
 
 const transferTestContract = new web3.eth.Contract(abi, contractAddress, {
@@ -205,7 +70,43 @@ async function transderToAddress() {
         });
 }
 
-transderToContract().then(() => process.exit(0)).catch(error => {
+
+//---------------------------------storage Test------------------------------------
+
+async function storeNumber() {
+
+    const ttcTx = transferTestContract.methods.store(99);
+    const createTransaction = await web3.eth.accounts.signTransaction(
+        {
+            to: contractAddress,
+            data: ttcTx.encodeABI(),
+            gas: 20000000,
+        },
+        accountFrom.privateKey
+    );
+    const createReceipt = await web3.eth.sendSignedTransaction(createTransaction.rawTransaction);
+
+    console.log("storeNumber number");
+};
+
+async function retrieveNumber() {
+    // 查询余额
+    const number = await transferTestContract.methods.retrieve().call();
+    console.log("retrieveNumber number", number);
+};
+
+async function mapTestFun() {
+    await transferTestContract.methods.mapTestFun(99, "owen").call();
+    console.log("mapTestFun success");
+};
+
+async function getMapFun() {
+    const name = await transferTestContract.methods.getMapFun(99).call();
+    console.log("getMapFun name", name);
+};
+
+
+retrieveNumber().then(() => process.exit(0)).catch(error => {
         console.error(error);
         process.exit(1);
     });

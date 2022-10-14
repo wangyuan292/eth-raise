@@ -1,5 +1,5 @@
 const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/7dc6b83ee508404b8122df710668c591'));
+const web3 = new Web3(new Web3.providers.HttpProvider('https://goerli.infura.io/v3/7dc6b83ee508404b8122df710668c591'));
 
 
 async function getBalance () {
